@@ -1,2 +1,0 @@
-# ImageUploader
-Created with CodeSandbox
