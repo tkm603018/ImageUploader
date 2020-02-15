@@ -8,9 +8,11 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "images": "3.0.2",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scripts": "3.0.1",
+    "react-upload-gallery": "0.0.4",
     "usestate": "1.1.3"
   },
   "devDependencies": {
