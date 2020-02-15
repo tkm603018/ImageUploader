@@ -1,60 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ImageUploader = () => {
-  // this.state = { file: '', imagePreviewUrl: '' };
-  const [file, setFile] = useState("");
-  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
-
-  const handleSubmit = e => {
-    // TODO: do something with -> this.state.file
-    console.log("handle uploading-", file);
-  };
+  const [files, setFiles] = useState([]);
+  const [images, setImages] = useState([]);
 
   const handleImageChange = e => {
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    console.log("handleImageChange");
+    // e.preventDefault();
 
-    reader.onloadend = e => {
-      console.log("loadend", e);
-      setFile(file);
-      setImagePreviewUrl(reader.result);
-    };
+    // FileList to Array
+    let newFiles = Array.from(e.target.files);
 
-    reader.readAsDataURL(file);
+    // File Reader for Each file and and update state arrays
+    newFiles.forEach((files, i) => {
+      let reader = new FileReader();
+
+      reader.onloadend = () => {
+        setFiles(prevFiles => [...prevFiles, files]);
+        setImages(prevImages => [...prevImages, reader.result]);
+      };
+      console.log("files", files);
+      reader.readAsDataURL(files);
+    });
   };
 
-  const newState = {
-    file: file,
-    imagePreviewUrl: imagePreviewUrl
-  };
-
-  console.log("file", file);
+  useEffect(() => {
+    setImages(images);
+  }, [images]);
 
   return (
-    <div className="previewComponent">
-      <form onSubmit={e => handleSubmit(e)}>
+    <div>
+      <label
+        className="btn btn-default btn-sm z-depth-0 mr-0 pl-2 pr-2 custom-file-upload waves-effect waves-light"
+        htmlFor="file"
+      >
+        <i className="fas fa-image fa-fw" aria-hidden="true" />
         <input
-          className="fileInput"
+          className="upload"
           type="file"
-          onChange={e => handleImageChange(e)}
+          onChange={handleImageChange}
+          multiple
         />
-        <button
-          className="submitButton"
-          type="submit"
-          onClick={e => handleSubmit(e)}
-        >
-          Upload Image
-        </button>
-      </form>
-      <div className="imgPreview">
-        {newState ? (
-          <img type="url" src={imagePreviewUrl} alt="アイコン" />
-        ) : (
-          <div className="previewText">Please select an Image for Preview</div>
-        )}
+      </label>
+      <div>
+        {images.map((images, i) => {
+          return (
+            <div key={i}>
+              <img type="url" src={images} alt="a" />;
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
-
 export default ImageUploader;
